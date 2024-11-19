@@ -1,4 +1,4 @@
-# 24-25-python-game-XavierFarrus
+# 24-25-python-game-XaviDevWorks
 
 # Snake Game - Python
 Este es un juego clásico de Snake implementado en Python utilizando la biblioteca **Pygame**.
@@ -10,4 +10,4 @@ venv/Scripts/activate
 
 pip install pygame
 
-python snake.py
+python menu.py
