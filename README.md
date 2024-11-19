@@ -34,12 +34,13 @@ pip install pygame
 python menu.py
 
 
+
+
+
+
 # Calculadora en Pygame
 
 Una calculadora gráfica básica creada utilizando [Pygame](https://www.pygame.org/), diseñada para practicar interfaces gráficas en Python. Incluye funcionalidades para realizar operaciones matemáticas básicas (suma, resta, multiplicación y división) y un pequeño menú para salir de la aplicación.
-
-## Captura de Pantalla
-_Añade aquí una captura de pantalla de la calculadora en funcionamiento._
 
 ## Características
 
