@@ -17,6 +17,7 @@ white = (255, 255, 255)
 black = (0, 0, 0)
 red = (255, 0, 0)
 gray = (169, 169, 169)
+blue = (0, 0, 255)
 
 # Fuente
 font = pygame.font.Font(None, 40)
@@ -40,8 +41,8 @@ def draw_button(text, x, y, width, height, color, action=None):
 
 # Funciones para abrir los juegos
 def abrir_juego_1():
-    global game_process  # Hacemos que game_process sea global
-    if game_process is None or game_process.poll() is not None:  # Verificamos si el proceso ha terminado
+    global game_process
+    if game_process is None or game_process.poll() is not None:
         juego = 'snake.py'
         if os.path.exists(juego):
             print(f"Abriendo {juego}...")
@@ -52,8 +53,8 @@ def abrir_juego_1():
         print("El juego ya está en ejecución.")
 
 def abrir_juego_2():
-    global game_process  # Hacemos que game_process sea global
-    if game_process is None or game_process.poll() is not None:  # Verificamos si el proceso ha terminado
+    global game_process
+    if game_process is None or game_process.poll() is not None:
         juego = 'juego2.py'
         if os.path.exists(juego):
             print(f"Abriendo {juego}...")
@@ -63,12 +64,17 @@ def abrir_juego_2():
     else:
         print("El juego ya está en ejecución.")
 
+# Función para salir del programa
+def salir():
+    global running
+    running = False
+
 # Bucle principal del menú
 running = True
 while running:
     screen.fill(white)
 
-    # Dibujar el botón de "Snake"
+    # Dibujar los botones
     draw_button("Snake", 200, 100, 200, 50, red, abrir_juego_1)
 
     # Verificar si "Juego 2" existe, y cambiar color si no está disponible
@@ -81,6 +87,9 @@ while running:
     if not os.path.exists('juego2.py'):
         warning_text = font.render("Juego 2 no está disponible.", True, black)
         screen.blit(warning_text, (200, 270))
+
+    # Botón para salir
+    draw_button("Salir", 200, 300, 200, 50, blue, salir)
 
     # Procesar los eventos del juego
     for event in pygame.event.get():
