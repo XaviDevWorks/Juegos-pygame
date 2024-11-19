@@ -3,7 +3,7 @@
 # Menu
 Creado el menu de juego, donde actualmente se pueden selecionar dos juegos.
 
-# Juego de la Serpiente
+# Primer Juego: la Serpiente
 
 Este juego está programado en **Python** utilizando la biblioteca **Pygame**. Es una implementación clásica del juego **Snake**, en la cual el jugador controla una serpiente que se mueve por la pantalla para recoger manzanas (o "comida"). A medida que la serpiente come más manzanas, su tamaño (o longitud) aumenta. El objetivo del juego es evitar que la serpiente choque contra las paredes o contra su propio cuerpo, mientras se trata de obtener la mayor puntuación posible.
 
@@ -24,7 +24,7 @@ Este juego está programado en **Python** utilizando la biblioteca **Pygame**. E
 - **Puntación más alta**: El puntaje más alto alcanzado se guarda y muestra durante la partida.
 - **Velocidad variable**: Cuantas más manzanas comas, más rápido se moverá la serpiente.
 
-# Comandos
+# Comandos para poner en bash (en la terminal en visual)
 python -m venv venv 
 
 venv/Scripts/activate
