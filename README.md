@@ -54,11 +54,5 @@ Una calculadora gráfica básica creada utilizando [Pygame](https://www.pygame.o
 - Python 3.8 o superior.
 - Pygame 2.0 o superior.
 
-## Instalación
 
-1. Clona este repositorio en tu máquina local:
-
-   ```bash
-   git clone https://github.com/tu-usuario/calculadora-pygame.git
-   cd calculadora-pygame
 
