@@ -2,181 +2,194 @@ import turtle
 import time
 import random
 
-delay = 0.1
+# Configuración inicial
+retraso = 0.1
+puntuacion = 0
+puntuacion_alta = 0
 
-# Score
-score = 0
-high_score = 0
+# Configuración de la pantalla
+ventana = turtle.Screen()
+ventana.title("Juego de la Serpiente por @XaviDevWorks")
+ventana.bgcolor("black")
+ventana.setup(width=600, height=600)
+ventana.tracer(0)  # Desactiva la actualización automática de la ventana
 
-# Set up the screen
-wn = turtle.Screen()
-wn.title("Snake Game by XaviDevWorks")
-wn.bgcolor("green")
-wn.setup(width=600, height=600)
-wn.tracer(0)
+# Texto para pantallas de Game Over
+texto_inicio = turtle.Turtle()
+texto_inicio.speed(0)
+texto_inicio.color("white")
+texto_inicio.penup()
+texto_inicio.hideturtle()
 
-# Snake head
-head = turtle.Turtle()
-head.speed(0)
-head.shape("square")
-head.color("black")
-head.penup()
-head.goto(0,0)
-head.direction = "stop"
+# Cabeza de la serpiente
+cabeza = turtle.Turtle()
+cabeza.speed(0)
+cabeza.shape("square")
+cabeza.color("darkgreen")
+cabeza.penup()
+cabeza.goto(0, 0)
+cabeza.direccion = "detenida"
 
-# Snake food
-food = turtle.Turtle()
-food.speed(0)
-food.shape("square")  # Cambiado de "s" a "square"
-food.color("red")
-food.penup()
-food.goto(0,100)
+# Comida de la serpiente
+comida = turtle.Turtle()
+comida.speed(0)
+comida.shape("circle")
+comida.color("yellow")
+comida.penup()
+comida.goto(0, 100)
 
-segments = []
+segmentos = []
 
-# Pen
-pen = turtle.Turtle()
-pen.speed(0)
-pen.shape("square")
-pen.color("white")
-pen.penup()
-pen.hideturtle()
-pen.goto(0, 260)
-pen.write("Score: 0  High Score: 0", align="center", font=("Courier", 24, "normal"))
+# Texto de puntuación
+texto = turtle.Turtle()
+texto.speed(0)
+texto.shape("square")
+texto.color("white")
+texto.penup()
+texto.hideturtle()
+texto.goto(0, 260)
 
-# Functions
-def go_up():
-    if head.direction != "down":
-        head.direction = "up"
+def actualizar_puntuacion():
+    texto.clear()
+    texto.write(f"Puntuación: {puntuacion}  Puntuación Más Alta: {puntuacion_alta}", align="center", font=("Courier", 24, "normal"))
 
-def go_down():
-    if head.direction != "up":
-        head.direction = "down"
+actualizar_puntuacion()
 
-def go_left():
-    if head.direction != "right":
-        head.direction = "left"
+# Funciones de movimiento
+def mover_arriba():
+    if cabeza.direccion != "abajo":
+        cabeza.direccion = "arriba"
 
-def go_right():
-    if head.direction != "left":
-        head.direction = "right"
+def mover_abajo():
+    if cabeza.direccion != "arriba":
+        cabeza.direccion = "abajo"
 
-def move():
-    if head.direction == "up":
-        y = head.ycor()
-        head.sety(y + 20)
+def mover_izquierda():
+    if cabeza.direccion != "derecha":
+        cabeza.direccion = "izquierda"
 
-    if head.direction == "down":
-        y = head.ycor()
-        head.sety(y - 20)
+def mover_derecha():
+    if cabeza.direccion != "izquierda":
+        cabeza.direccion = "derecha"
 
-    if head.direction == "left":
-        x = head.xcor()
-        head.setx(x - 20)
+def mover():
+    if cabeza.direccion == "arriba":
+        cabeza.sety(cabeza.ycor() + 20)
+    if cabeza.direccion == "abajo":
+        cabeza.sety(cabeza.ycor() - 20)
+    if cabeza.direccion == "izquierda":
+        cabeza.setx(cabeza.xcor() - 20)
+    if cabeza.direccion == "derecha":
+        cabeza.setx(cabeza.xcor() + 20)
 
-    if head.direction == "right":
-        x = head.xcor()
-        head.setx(x + 20)
+# Funciones para los botones
+def crear_boton(texto, color, x, y, funcion):
+    boton = turtle.Turtle()
+    boton.speed(0)
+    boton.shape("square")
+    boton.color(color)
+    boton.penup()
+    boton.goto(x, y)
+    boton.shapesize(stretch_wid=2, stretch_len=6)
+    
+    # Escribir el texto en el botón
+    texto_boton = turtle.Turtle()
+    texto_boton.speed(0)
+    texto_boton.color("white")
+    texto_boton.penup()
+    texto_boton.hideturtle()
+    texto_boton.goto(x, y-10)
+    texto_boton.write(texto, align="center", font=("Courier", 14, "bold"))
 
-# Keyboard bindings
-wn.listen()
-wn.onkeypress(go_up, "w")
-wn.onkeypress(go_down, "s")
-wn.onkeypress(go_left, "a")
-wn.onkeypress(go_right, "d")
+    # Asociar la función al botón
+    ventana.onclick(lambda x, y: funcion())  # Hacer clic en el botón
 
-# Main game loop
-while True:
-    wn.update()
+    return boton, texto_boton
 
-    # Check for a collision with the border
-    if head.xcor()>290 or head.xcor()<-290 or head.ycor()>290 or head.ycor()<-290:
-        time.sleep(1)
-        head.goto(0,0)
-        head.direction = "stop"
+def pantalla_game_over():
+    texto_inicio.clear()
+    texto_inicio.goto(0, 50)
+    texto_inicio.write("¡Game Over!", align="center", font=("Courier", 24, "bold"))
+    texto_inicio.goto(0, -10)
+    texto_inicio.write(f"Puntuación Final: {puntuacion}", align="center", font=("Courier", 16, "normal"))
+    texto_inicio.goto(0, -50)
+    texto_inicio.write("Haz clic en el botón para continuar o salir", align="center", font=("Courier", 16, "normal"))
+    
+    # Crear botones
+    crear_boton("Seguir", "green", -100, -100, iniciar_juego)
+    crear_boton("Salir", "red", 100, -100, salir_juego)
 
-        # Hide the segments
-        for segment in segments:
-            segment.goto(1000, 1000)
-        
-        # Clear the segments list
-        segments.clear()
+# Salir del juego
+def salir_juego():
+    ventana.bye()
 
-        # Reset the score
-        score = 0
+# Iniciar el juego
+def iniciar_juego():
+    texto_inicio.clear()
+    for segmento in segmentos:
+        segmento.goto(1000, 1000)  # Mueve los segmentos fuera de la pantalla
+    segmentos.clear()
+    cabeza.goto(0, 0)
+    cabeza.direccion = "detenida"
+    global puntuacion, retraso
+    puntuacion = 0
+    retraso = 0.1
+    actualizar_puntuacion()
+    bucle_juego()
 
-        # Reset the delay
-        delay = 0.1
+# Bucle principal del juego
+def bucle_juego():
+    mover()  # Mueve la serpiente cada vez que se actualiza
+    # Colisión con bordes
+    if cabeza.xcor() > 290 or cabeza.xcor() < -290 or cabeza.ycor() > 290 or cabeza.ycor() < -290:
+        pantalla_game_over()
+        return
 
-        pen.clear()
-        pen.write("Score: {}  High Score: {}".format(score, high_score), align="center", font=("Courier", 24, "normal")) 
-
-
-    # Check for a collision with the food
-    if head.distance(food) < 20:
-        # Move the food to a random spot
+    # Colisión con la comida
+    if cabeza.distance(comida) < 20:
         x = random.randint(-290, 290)
         y = random.randint(-290, 290)
-        food.goto(x,y)
+        comida.goto(x, y)
 
-        # Add a segment
-        new_segment = turtle.Turtle()
-        new_segment.speed(0)
-        new_segment.shape("square")
-        new_segment.color("grey")
-        new_segment.penup()
-        segments.append(new_segment)
+        nuevo_segmento = turtle.Turtle()
+        nuevo_segmento.speed(0)
+        nuevo_segmento.shape("square")
+        nuevo_segmento.color("forestgreen")
+        nuevo_segmento.penup()
+        segmentos.append(nuevo_segmento)
 
-        # Shorten the delay
-        delay -= 0.001
+        global puntuacion, puntuacion_alta, retraso
+        puntuacion += 10
+        if puntuacion > puntuacion_alta:
+            puntuacion_alta = puntuacion
+        retraso -= 0.001
+        actualizar_puntuacion()
 
-        # Increase the score
-        score += 10
+    # Mover los segmentos del cuerpo
+    for i in range(len(segmentos) - 1, 0, -1):
+        x = segmentos[i - 1].xcor()
+        y = segmentos[i - 1].ycor()
+        segmentos[i].goto(x, y)
 
-        if score > high_score:
-            high_score = score
-        
-        pen.clear()
-        pen.write("Score: {}  High Score: {}".format(score, high_score), align="center", font=("Courier", 24, "normal")) 
+    if segmentos:
+        x = cabeza.xcor()
+        y = cabeza.ycor()
+        segmentos[0].goto(x, y)
 
-    # Move the end segments first in reverse order
-    for index in range(len(segments)-1, 0, -1):
-        x = segments[index-1].xcor()
-        y = segments[index-1].ycor()
-        segments[index].goto(x, y)
+    # Colisión con el cuerpo
+    for segmento in segmentos:
+        if segmento.distance(cabeza) < 20:
+            pantalla_game_over()
+            return
 
-    # Move segment 0 to where the head is
-    if len(segments) > 0:
-        x = head.xcor()
-        y = head.ycor()
-        segments[0].goto(x,y)
+    ventana.ontimer(bucle_juego, int(retraso * 1000))  # Llama a la función después de un retraso
 
-    move()    
+# Controles de teclado
+ventana.listen()
+ventana.onkeypress(mover_arriba, "w")
+ventana.onkeypress(mover_abajo, "s")
+ventana.onkeypress(mover_izquierda, "a")
+ventana.onkeypress(mover_derecha, "d")
 
-    # Check for head collision with the body segments
-    for segment in segments:
-        if segment.distance(head) < 20:
-            time.sleep(1)
-            head.goto(0,0)
-            head.direction = "stop"
-        
-            # Hide the segments
-            for segment in segments:
-                segment.goto(1000, 1000)
-        
-            # Clear the segments list
-            segments.clear()
-
-            # Reset the score
-            score = 0
-
-            # Reset the delay
-            delay = 0.1
-        
-            # Update the score display
-            pen.clear()
-            pen.write("Score: {}  High Score: {}".format(score, high_score), align="center", font=("Courier", 24, "normal"))
-
-    time.sleep(delay)
-
-wn.mainloop()
+bucle_juego()  # Ejecuta el bucle principal de la ventana
+ventana.mainloop()  # Mantiene la ventana abierta hasta que el jugador decida cerrarla
