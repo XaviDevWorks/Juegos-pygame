@@ -78,3 +78,4 @@ while running:
             salir()
 
     pygame.display.flip()
+
