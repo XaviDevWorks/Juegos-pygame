@@ -99,6 +99,9 @@ Sigue estos pasos para ejecutar el programa:
 - **Menú principal**  
   *Pantalla inicial con opciones para seleccionar entre el juego y la calculadora.*
 
+
+Falta la carpeta venv
+
 - **Juego de la Serpiente**  
   *Vista del juego en acción, con la serpiente comiendo una manzana.*
 
